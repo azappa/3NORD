@@ -4,10 +4,30 @@
 
 var UI = require('ui');
 var ajax = require('ajax');
+var Settings = require('settings');
 var _ = require('lodash.js');
 var moment = require('moment.js');
 var URL = 'http://www.viaggiatreno.it/viaggiatrenonew/resteasy/viaggiatreno/soluzioniViaggioNew/01318/01511/' + moment().format();
 console.log('>> Search URL is >> : ', URL);
+
+
+
+// Set a configurable with the open callback
+Settings.config(
+  { url: 'http://emanuelebrivio.github.io/pebble-3nord/' },
+  function(e) {
+    console.log('closed configurable');
+
+    // Show the parsed response
+    console.log(JSON.stringify(e.options));
+
+    // Show the raw response if parsing failed
+    if (e.failed) {
+      console.log(e.response);
+    }
+  }
+);
+
 
 var main = new UI.Card({
   title: '3NORD.js',
@@ -26,6 +46,7 @@ var results = new UI.Menu({
   }]
 });
 
+
 var parseResults = function (results) {
   return _.map(results, function (r) {
     //console.log(JSON.stringify(r, null, 2));
@@ -37,6 +58,7 @@ var parseResults = function (results) {
     };
   });
 };
+
 
 var getResults = function (url) {
   // Make the request
@@ -64,5 +86,6 @@ var getResults = function (url) {
     }
   );
 };
+
 
 getResults(URL);
